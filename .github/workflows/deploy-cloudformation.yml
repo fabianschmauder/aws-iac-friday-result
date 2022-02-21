@@ -1,0 +1,22 @@
+name: Deploy with cloudfromation
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+ 
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy new cloudformation-stack
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_REGION: us-west-2
+        run: |
+          cd coudformation
+          aws cloudformation create-stack --stack-name github-created-stack --template-body file://cloudformation-vpc.yml
