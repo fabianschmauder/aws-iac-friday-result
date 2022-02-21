@@ -44,3 +44,17 @@ Resources:
         Ref: webServerPublicSubnet
       RouteTableId:
         Ref: publicRouteTable
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+        GroupDescription: Allow web server to communicate over http
+        VpcId:
+          Ref: webServerVpc
+        SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
