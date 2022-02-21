@@ -23,3 +23,24 @@ Resources:
         Ref: webServerVpc
       InternetGatewayId:
         Ref: myInternetGateway
+  publicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:  
+        Ref: webServerVpc
+  routeToIgw:
+    Type: AWS::EC2::Route
+    DependsOn: myInternetGateway
+    Properties:
+       RouteTableId:
+         Ref: publicRouteTable
+       DestinationCidrBlock: 0.0.0.0/0
+       GatewayId:
+         Ref: myInternetGateway
+  webServerPublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: webServerPublicSubnet
+      RouteTableId:
+        Ref: publicRouteTable
