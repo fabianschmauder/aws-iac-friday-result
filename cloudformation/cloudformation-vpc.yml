@@ -13,7 +13,7 @@ Resources:
       VpcId:
         Ref: webServerVpc
       CidrBlock: 10.0.1.0/24
-      AvailabilityZone: "eu-central-1a"
+      AvailabilityZone: "us-west-2a"
   myInternetGateway:
     Type: AWS::EC2::InternetGateway
   AttachGateway:
@@ -58,3 +58,28 @@ Resources:
         SecurityGroupEgress:
         - IpProtocol: -1
           CidrIp: 0.0.0.0/0
+  WebServerInstance: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: ami-0341aeea105412b57
+      InstanceType: t2.micro
+      KeyName: webserverkey
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - Ref: WebServerSecurityGroup
+          SubnetId: 
+            Ref: webServerPublicSubnet
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            # Install Apache Web Server and PHP
+            yum install -y httpd mysql php
+            # Download Lab files
+            wget https://aws-tc-largeobjects.s3.amazonaws.com/ILT-TF-100-TUFOUN-1/4-lab-vpc-web-server/lab-app.zip
+            unzip lab-app.zip -d /var/www/html/
+            # Turn on web server
+            chkconfig httpd on
+            service httpd start
