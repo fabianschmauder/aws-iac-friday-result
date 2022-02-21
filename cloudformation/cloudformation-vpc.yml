@@ -63,7 +63,6 @@ Resources:
     Properties: 
       ImageId: ami-0341aeea105412b57
       InstanceType: t2.micro
-      KeyName: webserverkey
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
