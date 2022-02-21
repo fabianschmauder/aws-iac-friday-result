@@ -22,4 +22,4 @@ jobs:
         run: |
           cd terraform
           terraform init
-          terraform apply -y
+          terraform apply -auto-approve
